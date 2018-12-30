@@ -1,0 +1,30 @@
+let fs = require("fs");
+let _ = require("lodash");
+let md5 = require("js-md5");
+let crackThePass = require("./crackPassword.jsx");
+
+//import pan_tadeusz.txt file
+let originalText = fs.readFileSync("./pan_tadeusz.txt").toString("utf-8");
+
+//remove special characters
+let textWithoutSpecialChars = originalText.replace(
+  /[\. \* \\ \` \! \@ \# \$ \% \^ \& \{ \} \; \: \" \' \<  \, \. \> \? \/ \— \_ \+ \= \» \« \… \s \r\n\t|\n|\r\t|\r\r]/g,
+  " "
+);
+
+//prepearing array of words, removing spacing and duplicates
+let arrayOfAllWords = textWithoutSpecialChars.split(" ");
+let arrayOfAllWordsWithoutSpacing = arrayOfAllWords.filter(e => e !== "");
+let arrayOfUniqueWords = _.uniq(arrayOfAllWordsWithoutSpacing);
+let arrayOfUniqueWordsWithMD5Hashes = arrayOfUniqueWords.map(
+  e => e + " " + md5(e)
+);
+
+//create a rainbow table
+let rainbowTable = arrayOfUniqueWordsWithMD5Hashes.join("\n");
+let createRainbowFile = `/***** RAINBOW TABLE *****\n${rainbowTable}\n**************************/\n(${crackThePass})();\n`;
+//save to "rainbow_word_list.txt"
+fs.writeFile("rainbow_word_list.txt", createRainbowFile, err => {
+  if (err) throw error;
+  console.log('"rainbow_word_list.txt" created!');
+});

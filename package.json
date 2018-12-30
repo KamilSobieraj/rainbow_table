@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "word": "node mr_tadeusz_create_rainbow_table.jsx"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "js-md5": "^0.7.3",
+    "lodash": "^4.17.11"
+  }
+}
